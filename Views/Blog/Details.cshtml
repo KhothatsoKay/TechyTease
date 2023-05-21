@@ -1,0 +1,57 @@
+@model Blog.Models.BlogModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+<div class="article">
+  <div class="article">
+            <div class="authorname">
+            <h2>@Model.AuthorName</h2>
+            <div class="authorimage">
+                <img src="@Model.ImagePath" alt="" />
+            </div>
+        </div>
+        <div class="contents">
+            <h2 >@Model.Title</h2>
+            <p>@Html.Raw(@Model.Content)</p>
+            <p>@Model.Created</p>
+            <h3>Reactions</h3>
+    <ul>
+        @if (Model.Reactions != null)
+        {
+        @foreach (var reaction in Model.Reactions)
+        {
+            <li>@reaction.Value - @reaction.Comment</li>
+            
+        }
+        }
+    </ul>
+    <h3>React</h3>
+    <form method="post" action="/Blog/Reaction">
+       <input type="hidden" name="blogId" value="@Model.Id" />
+       <label for="value">Reaction:</label>
+       <select name="value">
+        <option value="🙁">🙁</option>
+        <option value="😒">😒</option>
+        <option value="🙂">🙂</option>
+        <option value="😂">😂</option>
+        <option value="😍">😍</option>
+       </select>
+       <br />
+       <label for="comment">Comment:</label>
+       <input type="text" name="comment" />
+       <br />
+      <button type="submit">Comment</button>
+    </form>
+
+     @if (User.Identity.Name == Model.AuthorName){
+              <div class="actions">
+                <a href="/Blog/Rating?blogId=Item.Id"></a>
+                <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> 
+                <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+                <a asp-action="Details" asp-route-id="@Model.Id">Details</a>
+               </div>
+     }
+    </div class="actions">
+        <a asp-action="Index">Go back</a>
+    </div>

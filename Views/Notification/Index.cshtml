@@ -1,0 +1,25 @@
+@model IEnumerable<Notification>
+    <h2>Notifications</h2>
+    @if(Model != null){
+    @foreach (var notification in Model)
+    {
+        <div class="card">
+            <div class="card-body">
+                <ul>
+                <li>@notification.Message</li>
+                <p class="card-text">
+                    <small>@notification.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</small>
+                    <a href="@Url.Action("Details", "Notification", new{id = notification.BlogId})">View Blog</a>
+                    @if(!notification.IsRead)
+                    {
+                        <form asp-action="MarkAsRead">
+                            <input type="hidden" name="id" value="@notification.Id" />
+                            <button type="submit" class="btn btn-link">Mark As read</button>
+                        </form>
+                    }
+                </p>
+                </ul>
+            </div>
+        </div>
+    }
+    }

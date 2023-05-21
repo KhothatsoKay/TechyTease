@@ -1,0 +1,11 @@
+<div id="notifications">
+    @if(ViewBag.Notifications != null){
+    @foreach (var notification in ViewBag.Notifications)
+    {
+        <div class="notification @(notification.IsRead ? "read" : "unread")">
+            <span>@notification.Message</span>
+            <span class="date">@notification.CreatedDate.ToString("yyyy-MM-dd HH:mm:ss")</span>
+        </div>
+    }
+    }
+</div>
