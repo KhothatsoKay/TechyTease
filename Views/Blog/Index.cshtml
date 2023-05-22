@@ -6,7 +6,7 @@
     <div class="form-group">
         <input type="text" name="search" class="form-control" placeholder="Search">
     </div>
-    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="submit" class="btn btn-primary searchbtn">Search</button>
 </form>
 
 
@@ -38,8 +38,8 @@
             }
             <h2 style="display: inline-block; vertical-align: middle;">@item.AuthorName</h2>
             <div class="authorimage">
-                <a href="@item.ImagePath" target="_blank">
-                <img src="@item.ImagePath" alt="" />
+                <a href="@item.ImagePath" >
+                <img src="@item.ImagePath" alt=""/>
                 </a>
             </div>
         </div>
@@ -80,5 +80,8 @@
           }
         </div>
     </div>
+
+
 }
 }
+  

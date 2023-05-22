@@ -88,12 +88,16 @@ h1{
   text-align: center;
 }
 .reactor{
-  color: lightblue;
+  color: rgb(1, 30, 40);
   font-size: large;
   size: 20px;
 }
 .reactionValue{
-  color: #edf1ed
+  color: #000;
+  font-size: small;
+}
+.btn .btn-primary .searchbtn{
+  display: flex;
 }
 .reactions{
   background-color: #0d1e3a;
@@ -239,8 +243,7 @@ footer .reply-link {
     
   }
   .contents{
-    display: flex;
-    flex-direction: column;
+    display: block;
   }
 }
 
@@ -273,6 +276,8 @@ footer .reply-link {
   height: 100%;
   margin-bottom: 10px;
 }
+
+
 
 .contents {
   flex-basis: 30%;
