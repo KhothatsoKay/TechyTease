@@ -16,7 +16,7 @@ namespace Blog.Controllers
         private readonly ILogger<NotificationController> _logger;
         private readonly INotificationService _notificationService;
 
-        public NotificationController(ILogger<NotificationController> logger,BlogContext context, INotificationService notificationService)
+        public NotificationController(ILogger<NotificationController> logger, BlogContext context, INotificationService notificationService)
         {
             _logger = logger;
             _notificationService = notificationService;
@@ -32,17 +32,27 @@ namespace Blog.Controllers
             return View(notifications);
         }
         [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> MarkAsRead(int id)
         {
             var notification = await _context.Notifications.FindAsync(id);
-            if (notification == null){
+            if (notification == null)
+            {
                 return NotFound();
             }
+
             notification.IsRead = true;
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
+            // Update the notification count in ViewBag
+            var userId = User.Identity.Name;
+            var notifications = await _notificationService.GetNotificationsAsync(userId);
+            ViewBag.UnreadNotificationsCount = notifications?.Count(n => !n.IsRead) ?? 0;
+
+            
+            return RedirectToAction("Index", new { id = notification.Id });
+        }
         
+
     }
 }

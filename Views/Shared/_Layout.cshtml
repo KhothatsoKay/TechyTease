@@ -32,6 +32,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Notification" id="notificationsDropdown">
+                                <i data-feather="bell"></i>
+                                     @if (ViewBag.UnreadNotificationsCount > 0)
+                                            {
+                                          <span class="badge badge-danger notification-badge">@ViewBag.UnreadNotificationsCount</span>
+                                            }
+                            </a>
+                         
+                         </li>
+
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -52,6 +63,51 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/feather/unpkg/feather.min.js"></script>
+    <script>
+   <script>
+    $(document).ready(function () {
+        function updateNotificationCount(count) {
+            var badge = $('.notification-badge');
+            if (count > 0) {
+                badge.text(count);
+                badge.show();
+            } else {
+                badge.hide();
+            }
+        }
+
+        function fetchNotificationCount() {
+            $.ajax({
+                url: '@Url.Action("GetNotificationCount", "Notification")',
+                type: 'GET',
+                success: function (count) {
+                    updateNotificationCount(count);
+                }
+            });
+        }
+
+        fetchNotificationCount();
+        setInterval(fetchNotificationCount, 60000); // Update every 60 seconds
+
+        // Handle the response after marking a notification as read
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: form.serialize(),
+                success: function (count) {
+                    updateNotificationCount(count);
+                }
+            });
+        });
+    });
+</script>
+    <script>
+        feather.replace();
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

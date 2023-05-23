@@ -200,9 +200,9 @@ C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Areas\Identity\Pages\Account\_Vie
 C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Areas\Identity\Pages\_ValidationScriptsPartial.cshtml.g.cs
 C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Areas\Identity\Pages\_ViewImports.cshtml.g.cs
 C:\Users\Khothatso\Blog\bin\Debug\net5.0\blog.db
-C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Views\Blog\Notifications.cshtml.g.cs
 C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Views\Notification\Index.cshtml.g.cs
 C:\Users\Khothatso\Blog\bin\Debug\net5.0\appsettings.Development (2).json
 C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Views\Home\Index (2).cshtml.g.cs
 C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Views\Home\Privacy (2).cshtml.g.cs
 C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Views\Shared\_ValidationScriptsPartial (2).cshtml.g.cs
+C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Views\Blog\Notification.cshtml.g.cs

@@ -372,8 +372,31 @@ footer .reply-link {
   margin: 0 auto;
   
 }
+.notifications-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: #fff;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+
+.notifications-container.show {
+  display: block;
+}
+.notification-badge{
+  color:#024908;
+  margin-left: -10px;
+  font-size: medium;
+}
+
+.notification {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
 .form-container{
-  box-shadow: 0 2px 6px rgba(217, 3, 249, 0.2); /* Box shadow style */
+  box-shadow: 0 2px 6px rgba(217, 3, 249, 0.2); 
   margin: 10px;
   padding: 10px;
   background-color: #ede8e8;
