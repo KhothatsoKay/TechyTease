@@ -38,11 +38,9 @@
                                      @if (ViewBag.UnreadNotificationsCount > 0)
                                             {
                                           <span class="badge badge-danger notification-badge">@ViewBag.UnreadNotificationsCount</span>
-                                            }
+                                           }
                             </a>
-                         
                          </li>
-
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -88,9 +86,7 @@
         }
 
         fetchNotificationCount();
-        setInterval(fetchNotificationCount, 60000); // Update every 60 seconds
-
-        // Handle the response after marking a notification as read
+        setInterval(fetchNotificationCount, 60000);
         $('form').on('submit', function (e) {
             e.preventDefault();
             var form = $(this);

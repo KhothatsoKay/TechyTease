@@ -9,7 +9,7 @@
                 <li>@notification.Message</li>
                 <p class="card-text">
                     <small>@notification.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</small>
-                    <a href="@Url.Action("Details", "Notification", new{id = notification.BlogId})">View Blog</a>
+                    <a href="@Url.Action("Details", "Blog", new{id = notification.BlogId})">View Blog</a>
                     @if(!notification.IsRead)
                     {
                         <form asp-action="MarkAsRead">
