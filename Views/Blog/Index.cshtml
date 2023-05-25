@@ -63,7 +63,7 @@
              @if (SignInManager.IsSignedIn(User)){
              <a asp-action="Details" asp-route-id="@item.Id">Comment</a>
              }else{
-    <h4>Please Sign In to rate and comment</h4>
+    <h4>Sign In to comment</h4>
 }
               @if (User.Identity.Name == item.AuthorName){
               <div class="actions">
