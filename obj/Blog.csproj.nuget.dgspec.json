@@ -57,10 +57,6 @@
               "target": "Package",
               "version": "[5.0.4, )"
             },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
-              "target": "Package",
-              "version": "[5.0.4, )"
-            },
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
               "version": "[5.0.4, )"
@@ -69,9 +65,13 @@
               "target": "Package",
               "version": "[5.0.4, )"
             },
-            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+            "Newtonsoft.Json": {
               "target": "Package",
-              "version": "[5.0.2, )"
+              "version": "[13.0.3, )"
+            },
+            "SendGrid": {
+              "target": "Package",
+              "version": "[9.24.1, )"
             }
           },
           "imports": [

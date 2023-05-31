@@ -1,0 +1,13 @@
+@model List<NewsArticle>
+
+<h2>Tech News Articles</h2>
+
+<ul>
+    @foreach (var article in Model)
+    {
+        <li>
+            <a href="@article.Url" target="_blank">@article.Title</a>
+            <p>Published At: @article.PublishedAt</p>
+        </li>
+    }
+</ul>

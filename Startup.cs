@@ -15,6 +15,7 @@ using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Blog.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Blog
 {
@@ -41,6 +42,8 @@ namespace Blog
                 new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Images"))
             );
             services.AddRazorPages();
+            services.AddHttpClient();
+      
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

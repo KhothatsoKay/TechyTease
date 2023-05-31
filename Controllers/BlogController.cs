@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Blog.Data;
 using Blog.Models;
@@ -12,11 +10,7 @@ using System.IO;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using System.Text.Json;
-using System.Security.Claims;
 using System.Text.RegularExpressions;
-using Microsoft.CodeAnalysis.Differencing;
-using System.Diagnostics;
 
 namespace Blog.Controllers
 {
