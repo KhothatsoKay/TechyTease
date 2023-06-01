@@ -4,10 +4,15 @@
 
 @foreach (var article in Model)
 {
-    <div>
-        <h2>@article.Title</h2>
-        <p>@article.Description</p>
-        <img src="@article.Image" alt="Article Image" width="200">
+    <div class="article">
+        <div class="contents">
+            <h2>@article.Title</h2>
+            <p>@article.Description</p>
+        </div>
+        <div class="authorimage">
+            <img src="@article.Image" alt="Article Image" style="max-width: 200px; height: auto;">
+        </div>
         <p><a href="@article.Url">Read More</a></p>
     </div>
 }
+

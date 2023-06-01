@@ -8,8 +8,19 @@
     </div>
     <button type="submit" class="btn btn-primary searchbtn">Search</button>
 </form>
-
-
+<h2>Top News Articles</h2>
+<div class="top-news-container">
+    <div class="top-news-list">
+        @foreach (var article in Enumerable.Take(ViewBag.Top3Articles, 3))
+        {
+            <div class="top-news-card">
+                <h3>@article.Title</h3>
+                <p>@article.Description</p>
+                <img src="@article.Image" alt="@article.Title" />
+            </div>
+        }
+    </div>
+</div>
 <h1 class="posts">Recent Posts</h1>
 @if (SignInManager.IsSignedIn(User)){
 <a href="/Blog/Create">

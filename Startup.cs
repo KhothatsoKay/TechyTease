@@ -16,6 +16,7 @@ using System.IO;
 using Blog.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Blog.Controllers;
 
 namespace Blog
 {
@@ -43,6 +44,7 @@ namespace Blog
             );
             services.AddRazorPages();
             services.AddHttpClient();
+            services.AddScoped<NewsController>();
       
         }
 

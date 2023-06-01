@@ -11,6 +11,8 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using System.Text.RegularExpressions;
+using System.Net.Http;
+using System.Collections.Generic;
 
 namespace Blog.Controllers
 {
@@ -18,18 +20,19 @@ namespace Blog.Controllers
     {
 
         private readonly UserManager<ApplicationUser> _userManager;
-
+        private readonly NewsController _newsController;
         private readonly BlogContext _context;
         private readonly IFileProvider fileProvider;
         private readonly IHostingEnvironment hostingEnvironment;
         private readonly INotificationService _notificationService;
 
 
-        public BlogController(BlogContext context, UserManager<ApplicationUser> userManager, IFileProvider fileProvider, IHostingEnvironment env,
+        public BlogController(BlogContext context, NewsController newsController, UserManager<ApplicationUser> userManager, IFileProvider fileProvider, IHostingEnvironment env,
         INotificationService notificationService)
         {
             _context = context;
             fileProvider = fileProvider;
+            _newsController = newsController;
             hostingEnvironment = env;
             _userManager = userManager;
             _notificationService = notificationService;
@@ -39,17 +42,30 @@ namespace Blog.Controllers
 
 
         // GET: Blog
-        public async Task<IActionResult> Index(string search)
-        {
-            var userId = User.Identity.Name;
-            var notifications = await _notificationService.GetNotificationsAsync(userId);
-            ViewBag.Notifications = notifications;
-            ViewBag.UnreadNotificationsCount = notifications?.Count(n => !n.IsRead) ?? 0;
-            var blog = _context.Blogs.Include(b => b.User).
-            Include(b => b.Reactions).ThenInclude(r => r.User).
-            Where(b => string.IsNullOrEmpty(search) || b.Title.Contains(search) || b.Content.Contains(search) || b.AuthorName
-            .Contains(search)).
-            Select(b => new BlogModel
+   public async Task<IActionResult> Index(string search)
+{
+    var userId = User.Identity.Name;
+    var notifications = await _notificationService.GetNotificationsAsync(userId);
+    ViewBag.Notifications = notifications;
+    ViewBag.UnreadNotificationsCount = notifications?.Count(n => !n.IsRead) ?? 0;
+
+    // Create an instance of HttpClient
+    var httpClient = new HttpClient();
+
+    // Create an instance of NewsController with the HttpClient parameter
+    var newsController = new NewsController(httpClient);
+
+    // Call the Index action of NewsController to retrieve the top 3 articles
+    var newsActionResult = await newsController.Index();
+    if (newsActionResult is ViewResult newsViewResult)
+    {
+        var top3Articles = newsViewResult.Model as List<NewsArticle>;
+
+        // Retrieve the list of blogs
+        var blogs = _context.Blogs.Include(b => b.User)
+            .Include(b => b.Reactions).ThenInclude(r => r.User)
+            .Where(b => string.IsNullOrEmpty(search) || b.Title.Contains(search) || b.Content.Contains(search) || b.AuthorName.Contains(search))
+            .Select(b => new BlogModel
             {
                 Id = b.Id,
                 Title = b.Title,
@@ -63,15 +79,24 @@ namespace Blog.Controllers
                     Id = r.Id,
                     Value = r.Value,
                     reactor = r.reactor,
-                    Comment = r.Comment,
-
-                }).
-                ToList()
-            }).OrderByDescending(b => b.Created)
+                    Comment = r.Comment
+                }).ToList()
+            })
+            .OrderByDescending(b => b.Created)
             .ToList();
 
-            return View(blog);
-        }
+        // Pass the top 3 articles to the view using ViewBag
+        ViewBag.Top3Articles = top3Articles;
+
+        return View(blogs);
+    }
+
+    // Handle the case when the NewsController's Index action does not return a ViewResult
+    // Return an error view or handle it accordingly
+    return View("Error");
+}
+
+
 
         // GET: Blog/Details/5
         public async Task<IActionResult> Details(int? id)
