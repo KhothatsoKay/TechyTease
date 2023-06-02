@@ -3,14 +3,16 @@ using System;
 using Blog.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Blog.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    partial class BlogContextModelSnapshot : ModelSnapshot
+    [Migration("20230602075116_send")]
+    partial class send
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,14 +178,8 @@ namespace Blog.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("number")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("reactor")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("song")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

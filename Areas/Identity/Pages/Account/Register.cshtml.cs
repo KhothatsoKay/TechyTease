@@ -27,18 +27,18 @@ namespace Blog.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+
+        private readonly SendEmail _sendEmail;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            ILogger<RegisterModel> logger, SendEmail sendEmail)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
-            _emailSender = emailSender;
+            _sendEmail = sendEmail;
         }
 
         [BindProperty]
@@ -72,7 +72,7 @@ namespace Blog.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
-    
+
 
         }
 
@@ -126,9 +126,21 @@ namespace Blog.Areas.Identity.Pages.Account
                             pageHandler: null,
                             values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
                             protocol: Request.Scheme);
+                        _sendEmail.Send(Input.Email, "TechyTease | Confirm Account", $@"
+Hi {Input.FirstName},
+<br><br>
+Thank you for creating an account with us. To complete the registration process and ensure the security of your account, please click on the link below to confirm your email address:
+<br><br>
+<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Confirm Email Address</a>
+<br><br>
+If you did not create this account or believe this email was sent to you in error, please ignore this message.
+<br><br>
+Thank you for your cooperation.
+<br>
+Best regards,<br>
+TechyTease");
 
-                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
 
                         if (_userManager.Options.SignIn.RequireConfirmedAccount)
                         {

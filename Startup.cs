@@ -18,6 +18,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Blog.Controllers;
 
+
+
 namespace Blog
 {
     public class Startup
@@ -45,7 +47,15 @@ namespace Blog
             services.AddRazorPages();
             services.AddHttpClient();
             services.AddScoped<NewsController>();
-      
+
+            var configuration = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json")
+        .AddUserSecrets<Startup>()
+        .Build();
+
+            
+            services.AddScoped<SendEmail>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,7 +84,7 @@ namespace Blog
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Blog}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

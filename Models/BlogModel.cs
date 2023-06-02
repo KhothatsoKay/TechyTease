@@ -23,6 +23,7 @@ namespace Blog.Models
         public  byte[] AuthorProfilePicture {get; set;}
         public ApplicationUser User {get; set;}
         public ICollection<Reaction> Reactions {get; set;}
+        
     }
 
 

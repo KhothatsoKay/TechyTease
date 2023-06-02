@@ -19,5 +19,7 @@ namespace Blog.Models
         public string reactor {get; set;}
         [ForeignKey("UserName")]
         public ApplicationUser User {get; set;}
+        public int song {get; set;}
+        public string number {get; set;}
     }
 }
