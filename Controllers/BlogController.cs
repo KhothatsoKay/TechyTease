@@ -42,59 +42,59 @@ namespace Blog.Controllers
 
 
         // GET: Blog
-   public async Task<IActionResult> Index(string search)
-{
-    var userId = User.Identity.Name;
-    var notifications = await _notificationService.GetNotificationsAsync(userId);
-    ViewBag.Notifications = notifications;
-    ViewBag.UnreadNotificationsCount = notifications?.Count(n => !n.IsRead) ?? 0;
+        public async Task<IActionResult> Index(string search)
+        {
+            var userId = User.Identity.Name;
+            var notifications = await _notificationService.GetNotificationsAsync(userId);
+            ViewBag.Notifications = notifications;
+            ViewBag.UnreadNotificationsCount = notifications?.Count(n => !n.IsRead) ?? 0;
 
-    // Create an instance of HttpClient
-    var httpClient = new HttpClient();
+            // Create an instance of HttpClient
+            var httpClient = new HttpClient();
 
-    // Create an instance of NewsController with the HttpClient parameter
-    var newsController = new NewsController(httpClient);
+            // Create an instance of NewsController with the HttpClient parameter
+            var newsController = new NewsController(httpClient);
 
-    // Call the Index action of NewsController to retrieve the top 3 articles
-    var newsActionResult = await newsController.Index();
-    if (newsActionResult is ViewResult newsViewResult)
-    {
-        var top3Articles = newsViewResult.Model as List<NewsArticle>;
-
-        // Retrieve the list of blogs
-        var blogs = _context.Blogs.Include(b => b.User)
-            .Include(b => b.Reactions).ThenInclude(r => r.User)
-            .Where(b => string.IsNullOrEmpty(search) || b.Title.Contains(search) || b.Content.Contains(search) || b.AuthorName.Contains(search))
-            .Select(b => new BlogModel
+            // Call the Index action of NewsController to retrieve the top 3 articles
+            var newsActionResult = await newsController.Index();
+            if (newsActionResult is ViewResult newsViewResult)
             {
-                Id = b.Id,
-                Title = b.Title,
-                Content = b.Content,
-                ImagePath = b.ImagePath,
-                AuthorName = b.AuthorName,
-                Created = b.Created,
-                AuthorProfilePicture = b.AuthorProfilePicture,
-                Reactions = b.Reactions.Select(r => new Reaction
-                {
-                    Id = r.Id,
-                    Value = r.Value,
-                    reactor = r.reactor,
-                    Comment = r.Comment
-                }).ToList()
-            })
-            .OrderByDescending(b => b.Created)
-            .ToList();
+                var top3Articles = newsViewResult.Model as List<NewsArticle>;
 
-        // Pass the top 3 articles to the view using ViewBag
-        ViewBag.Top3Articles = top3Articles;
+                // Retrieve the list of blogs
+                var blogs = _context.Blogs.Include(b => b.User)
+                    .Include(b => b.Reactions).ThenInclude(r => r.User)
+                    .Where(b => string.IsNullOrEmpty(search) || b.Title.Contains(search) || b.Content.Contains(search) || b.AuthorName.Contains(search))
+                    .Select(b => new BlogModel
+                    {
+                        Id = b.Id,
+                        Title = b.Title,
+                        Content = b.Content,
+                        ImagePaths = b.ImagePaths,
+                        AuthorName = b.AuthorName,
+                        Created = b.Created,
+                        AuthorProfilePicture = b.AuthorProfilePicture,
+                        Reactions = b.Reactions.Select(r => new Reaction
+                        {
+                            Id = r.Id,
+                            Value = r.Value,
+                            reactor = r.reactor,
+                            Comment = r.Comment
+                        }).ToList()
+                    })
+                    .OrderByDescending(b => b.Created)
+                    .ToList();
 
-        return View(blogs);
-    }
+                // Pass the top 3 articles to the view using ViewBag
+                ViewBag.Top3Articles = top3Articles;
 
-    // Handle the case when the NewsController's Index action does not return a ViewResult
-    // Return an error view or handle it accordingly
-    return View("Error");
-}
+                return View(blogs);
+            }
+
+            // Handle the case when the NewsController's Index action does not return a ViewResult
+            // Return an error view or handle it accordingly
+            return View("Error");
+        }
 
 
 
@@ -166,22 +166,23 @@ namespace Blog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Content,Created,ImagePath")] BlogModel blogModel, IFormFile file)
+        public async Task<IActionResult> Create([Bind("Id,Title,Content,Created")] BlogModel blogModel, List<IFormFile> files)
         {
             if (ModelState.IsValid)
             {
-
                 blogModel.Created = DateTime.Now;
-
 
                 var regex = new Regex(@"\b(?:https?://|www\.)\S+\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
                 blogModel.Content = regex.Replace(blogModel.Content, match => $"<a href=\"{match.Value}\">{match.Value}</a>");
                 blogModel.AuthorName = User.Identity.Name;
                 var user = await _userManager.GetUserAsync(User);
                 blogModel.AuthorProfilePicture = user.ProfilePicture;
+
+                // Create a new list to store the image paths
+                blogModel.ImagePaths = new List<ImagePath>();
+
                 _context.Blogs.Add(blogModel);
                 await _context.SaveChangesAsync();
-
 
                 var timeElapsed = DateTime.Now - blogModel.Created;
                 if (timeElapsed.TotalHours >= 42)
@@ -193,29 +194,39 @@ namespace Blog.Controllers
                     blogModel.Created = blogModel.Created.AddDays(-1);
                 }
 
-                if (file != null || file.Length != 0)
+                if (files != null && files.Count > 0)
                 {
-                    FileInfo fi = new FileInfo(file.FileName);
-                    var newFilename = blogModel.Id + "_" + String.Format("{0:d}", (DateTime.Now.Ticks / 10) % 1000000) + fi.Extension;
-                    var webPath = hostingEnvironment.WebRootPath;
-                    var path = Path.Combine("", webPath + @"\Images\" + newFilename);
-                    var pathToSave = @"\Images\" + newFilename;
-                    using (var stream = new FileStream(path, FileMode.Create))
+                    foreach (var file in files)
                     {
-                        await file.CopyToAsync(stream);
-                    }
-                    blogModel.ImagePath = pathToSave;
-                    _context.Update(blogModel);
-                    await _context.SaveChangesAsync();
-                }
-                else
-                {
+                        if (file != null && file.Length != 0)
+                        {
+                            FileInfo fi = new FileInfo(file.FileName);
+                            var newFilename = blogModel.Id + "_" + String.Format("{0:d}", (DateTime.Now.Ticks / 10) % 1000000) + fi.Extension;
+                            var webPath = hostingEnvironment.WebRootPath;
+                            var path = Path.Combine("", webPath + @"\Images\" + newFilename);
+                            var pathToSave = @"\Images\" + newFilename;
+                            using (var stream = new FileStream(path, FileMode.Create))
+                            {
+                                await file.CopyToAsync(stream);
+                            }
 
-                    return RedirectToAction(nameof(Index));
+                            // Create a new ImagePath object for each file and add it to the ImagePaths list
+                            var imagePath = new ImagePath
+                            {
+                                Path = pathToSave,
+                                BlogModelId = blogModel.Id
+                            };
+                            _context.ImagePaths.Add(imagePath);
+                            blogModel.ImagePaths.Add(imagePath);
+                        }
+                    }
                 }
+
+                await _context.SaveChangesAsync();
             }
-            return View(blogModel);
+            return RedirectToAction("Index", blogModel);
         }
+
 
 
         // GET: Blog/Edit/5
@@ -302,7 +313,7 @@ namespace Blog.Controllers
         {
             return _context.Blogs.Any(e => e.Id == id);
         }
-        
+
     }
 }
 

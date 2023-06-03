@@ -18,6 +18,7 @@ namespace Blog.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
             base.OnModelCreating(builder);
             builder.HasDefaultSchema("AuthMVC");
             builder.Entity<IdentityUser>(entity =>
@@ -48,12 +49,17 @@ namespace Blog.Data
             {
                 entity.ToTable("UserTokens");
             });
+            builder.Entity<BlogModel>()
+                .HasMany(b => b.ImagePaths)
+                .WithOne(ip => ip.BlogModel)
+                .HasForeignKey(ip => ip.BlogModelId);
 
-        }
+        }    
         public DbSet<BlogModel> Blogs { get; set; }
         public DbSet<Reaction> Reactions { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<ImagePath> ImagePaths { get; set; }
          
     }
 }

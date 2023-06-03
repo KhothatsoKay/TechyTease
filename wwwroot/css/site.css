@@ -8,7 +8,7 @@ a.navbar-brand {
 }
 
 /* Provide sufficient contrast against white background */
-a {
+* {
   color: black;
   font-family: 'Quicksand', sans-serif;
 }
@@ -231,20 +231,7 @@ footer .reply-link {
   background-color: #faf7f7;
   overflow: hidden;
   font-family: 'Quicksand', sans-serif;
-  
-  
-}
-.article:hover {
-  
-  background-color: #ffffff;
-}
-@media (max-width: 768px) {
-  .article {
-    
-  }
-  .contents{
-    display: block;
-  }
+  transition: background-color 0.3s ease;
 }
 
 .authorname {
@@ -262,6 +249,28 @@ footer .reply-link {
   text-transform: capitalize;
 
 }
+.article:hover {
+  background-color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .article {
+      flex-direction: column;
+  }
+  .blog-image {
+    width: 50%;
+    max-width: none;
+}
+
+  .authorimage {
+      justify-content: center;
+  }
+
+  .contents {
+      flex-basis: 100%;
+      padding-left: 0;
+  }
+}
 .logo{
   height: 100px;
   width: 100px;
@@ -273,8 +282,18 @@ footer .reply-link {
 
 
 .authorimage {
-  height: 100%;
-  margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 20px;
+}
+.blog-image {
+  display: inline-block;
+  width: 100%;
+  max-width: 200px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  padding: 5px;
 }
 .contents {
   flex-basis: 30%;
@@ -286,9 +305,8 @@ footer .reply-link {
 .contents h2 {
   margin-top: 0;
 }
-.authorimage img{
-  max-width: 100%;
-}
+
+
 .header{
   position: absolute;
   height: 500px;
@@ -414,6 +432,11 @@ footer .reply-link {
 }
 .form-container form{
   width: 250px;
+}
+.row{
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
 }
 .intro{
   margin-top: -80px;

@@ -7,7 +7,6 @@ C:\Users\Khothatso\Blog\obj\Debug\net5.0\Blog.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Khothatso\Blog\obj\Debug\net5.0\Blog.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Khothatso\Blog\obj\Debug\net5.0\Blog.RazorAssemblyInfo.cache
 C:\Users\Khothatso\Blog\obj\Debug\net5.0\Blog.RazorAssemblyInfo.cs
-C:\Users\Khothatso\Blog\bin\Debug\net5.0\appsettings.Development (2).json
 C:\Users\Khothatso\Blog\bin\Debug\net5.0\appsettings.Development.json
 C:\Users\Khothatso\Blog\bin\Debug\net5.0\appsettings.json
 C:\Users\Khothatso\Blog\bin\Debug\net5.0\Blog.StaticWebAssets.xml

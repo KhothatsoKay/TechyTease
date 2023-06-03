@@ -25,12 +25,10 @@
                 <label asp-for="AuthorName"></label>
                 <input asp-for="AuthorName" class="form-control" value="@User.Identity.Name" readonly />
             </div>
-            <div class="form-group">
-               <div class="col-md-10">
-                <p>Upload an Image</p>
-                <input type="file" name="file" />
-               </div>
-            </div>
+            <div id="imageUploadContainer" class="form-group">
+              <input type="file" name="files" multiple />
+           </div>
+            <button type="button" onclick="addImageUpload()">Add More Images</button>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -41,7 +39,15 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
+ <script>
+        function addImageUpload() {
+            var container = document.getElementById("imageUploadContainer");
+            var input = document.createElement("input");
+            input.type = "file";
+            input.name = "files";
+            container.appendChild(input);
+        }
+    </script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
