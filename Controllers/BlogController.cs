@@ -70,7 +70,7 @@ namespace Blog.Controllers
                         Id = b.Id,
                         Title = b.Title,
                         Content = b.Content,
-                        ImagePaths = b.ImagePaths,
+                        ImagePath = b.ImagePath,
                         AuthorName = b.AuthorName,
                         Created = b.Created,
                         AuthorProfilePicture = b.AuthorProfilePicture,
@@ -107,7 +107,7 @@ namespace Blog.Controllers
             }
 
             var blog = await _context.Blogs
-                .Include(b => b.Reactions) // Include the "Reactions" property
+                .Include(b => b.Reactions)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (blog == null)
@@ -166,23 +166,22 @@ namespace Blog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Content,Created")] BlogModel blogModel, List<IFormFile> files)
+        public async Task<IActionResult> Create([Bind("Id,Title,Content,Created,ImagePath")] BlogModel blogModel, IFormFile file)
         {
             if (ModelState.IsValid)
             {
+
                 blogModel.Created = DateTime.Now;
+
 
                 var regex = new Regex(@"\b(?:https?://|www\.)\S+\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
                 blogModel.Content = regex.Replace(blogModel.Content, match => $"<a href=\"{match.Value}\">{match.Value}</a>");
                 blogModel.AuthorName = User.Identity.Name;
                 var user = await _userManager.GetUserAsync(User);
                 blogModel.AuthorProfilePicture = user.ProfilePicture;
-
-                // Create a new list to store the image paths
-                blogModel.ImagePaths = new List<ImagePath>();
-
                 _context.Blogs.Add(blogModel);
                 await _context.SaveChangesAsync();
+
 
                 var timeElapsed = DateTime.Now - blogModel.Created;
                 if (timeElapsed.TotalHours >= 42)
@@ -194,90 +193,26 @@ namespace Blog.Controllers
                     blogModel.Created = blogModel.Created.AddDays(-1);
                 }
 
-                if (files != null && files.Count > 0)
+                if (file != null && file.Length != 0)
                 {
-                    foreach (var file in files)
+                    FileInfo fi = new FileInfo(file.FileName);
+                    var newFilename = blogModel.Id + "_" + String.Format("{0:d}", (DateTime.Now.Ticks / 10) % 1000000) + fi.Extension;
+                    var webPath = hostingEnvironment.WebRootPath;
+                    var path = Path.Combine("", webPath + @"\Images\" + newFilename);
+                    var pathToSave = @"\Images\" + newFilename;
+                    using (var stream = new FileStream(path, FileMode.Create))
                     {
-                        if (file != null && file.Length != 0)
-                        {
-                            FileInfo fi = new FileInfo(file.FileName);
-                            var newFilename = blogModel.Id + "_" + String.Format("{0:d}", (DateTime.Now.Ticks / 10) % 1000000) + fi.Extension;
-                            var webPath = hostingEnvironment.WebRootPath;
-                            var path = Path.Combine("", webPath + @"\Images\" + newFilename);
-                            var pathToSave = @"\Images\" + newFilename;
-                            using (var stream = new FileStream(path, FileMode.Create))
-                            {
-                                await file.CopyToAsync(stream);
-                            }
-
-                            // Create a new ImagePath object for each file and add it to the ImagePaths list
-                            var imagePath = new ImagePath
-                            {
-                                Path = pathToSave,
-                                BlogModelId = blogModel.Id
-                            };
-                            _context.ImagePaths.Add(imagePath);
-                            blogModel.ImagePaths.Add(imagePath);
-                        }
+                        await file.CopyToAsync(stream);
                     }
-                }
-
-                await _context.SaveChangesAsync();
-            }
-            return RedirectToAction("Index", blogModel);
-        }
-
-
-
-        // GET: Blog/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var blogModel = await _context.Blogs.FindAsync(id);
-            if (blogModel == null)
-            {
-                return NotFound();
-            }
-            return View(blogModel);
-        }
-
-        // POST: Blog/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,Created,ImagePath")] BlogModel blogModel)
-        {
-            if (id != blogModel.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
+                    blogModel.ImagePath = pathToSave;
                     _context.Update(blogModel);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BlogModelExists(blogModel.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                else{
+                    return RedirectToAction("Index", blogModel);
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return View(blogModel);
+            return RedirectToAction("Index", blogModel);
         }
 
         // GET: Blog/Delete/5

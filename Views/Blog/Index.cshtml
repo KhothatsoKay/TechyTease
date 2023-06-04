@@ -47,27 +47,11 @@
                 style="height:50px ; width: 50px; border-radius: 50%;  ;">
             }
             <h2 style="display: inline-block; vertical-align: middle;">@item.AuthorName</h2>
-        <div class="authorimage">
-         @if (item.ImagePaths.Count > 1)
-    {
-        <div class="grid-container">
-            @foreach (var imagePath in item.ImagePaths)
-            {
-                <div class="grid-item">
-                    <a href="@imagePath.Path">
-                        <img src="@imagePath.Path" alt="" class="blog-image" />
-                    </a>
-                </div>
-            }
-        </div>
-    }
-    else if (item.ImagePaths.Count == 1)
-    {
-        <a href="@item.ImagePaths[0].Path">
-            <img src="@item.ImagePaths[0].Path" alt="" class="blog-image" />
-        </a>
-    }
-           </div>
+            <div class="authorimage">
+                <a href="@item.ImagePath" >
+                <img src="@item.ImagePath" alt="" class="blog-image"/>
+                </a>
+            </div>
         </div>
         <div class="contents">
             <h2>@item.Title</h2>

@@ -18,19 +18,12 @@ namespace Blog.Models
         public string Content { get; set; }
         public DateTime Created { get; set; }
         [Display(Name = "Upload Image")]
-        public List<ImagePath> ImagePaths { get; set; }
+        public string ImagePath  { get; set; }
         public string AuthorName { get; set; }
         public byte[] AuthorProfilePicture { get; set; }
         public ApplicationUser User { get; set; }
         public ICollection<Reaction> Reactions { get; set; }
 
-    }
-    public class ImagePath
-    {
-        public int Id { get; set; }
-        public string Path { get; set; }
-        public int BlogModelId { get; set; }
-        public BlogModel BlogModel { get; set; }
     }
 
 
