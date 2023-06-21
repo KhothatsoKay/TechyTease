@@ -1,0 +1,5 @@
+{
+    "appService.preDeployTask": "publish-release",
+    "appService.deploySubpath": "bin\\Release\\net5.0\\publish",
+    "appService.defaultWebAppToDeploy": "/subscriptions/95a6cb09-adc3-4eae-8a61-9a7981a6f74e/resourceGroups/01/providers/Microsoft.Web/sites/techytease"
+}
