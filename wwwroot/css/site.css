@@ -9,7 +9,6 @@ a.navbar-brand {
 
 /* Provide sufficient contrast against white background */
 * {
-  color: black;
   font-family: 'Quicksand', sans-serif;
 }
 
@@ -76,6 +75,10 @@ body {
 .title{
    margin-bottom: 5px;
 }
+.hidden {
+  display: none;
+}
+
 
 .article img{
   float: left;
@@ -258,7 +261,7 @@ footer .reply-link {
       flex-direction: column;
   }
   .blog-image {
-    width: 50%;
+    width: 100%;
     max-width: none;
 }
 
@@ -280,23 +283,27 @@ footer .reply-link {
   height: 100%;
 }
 
-
+.form-control{
+  border: none;
+  background-color: #e4e2e2;
+  border-radius: 0%;
+}
 .authorimage {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   gap: 20px;
   height: 150px;
-  margin: 0px;
+  width: 100%;
 }
 .blog-image {
   display: inline-block;
   width: 100%;
   max-width: 200px;
-  margin-right: 10px;
   border: 1px solid #ccc;
   padding: 5px;
   height: 80%;
+
 }
 .contents {
   flex-basis: 30%;
@@ -502,7 +509,7 @@ footer .reply-link {
   display: inline-block;
   width: 3em;
   height: 3em;
-  color: #008000;
+  color: #008000 ;
   position: fixed;
   bottom: 2em;
   right: 2em;

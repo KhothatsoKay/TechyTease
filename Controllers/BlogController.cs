@@ -49,13 +49,10 @@ namespace Blog.Controllers
             ViewBag.Notifications = notifications;
             ViewBag.UnreadNotificationsCount = notifications?.Count(n => !n.IsRead) ?? 0;
 
-            // Create an instance of HttpClient
             var httpClient = new HttpClient();
 
-            // Create an instance of NewsController with the HttpClient parameter
             var newsController = new NewsController(httpClient);
 
-            // Call the Index action of NewsController to retrieve the top 3 articles
             var newsActionResult = await newsController.Index();
             if (newsActionResult is ViewResult newsViewResult)
             {
@@ -85,14 +82,12 @@ namespace Blog.Controllers
                     .OrderByDescending(b => b.Created)
                     .ToList();
 
-                // Pass the top 3 articles to the view using ViewBag
                 ViewBag.Top3Articles = top3Articles;
 
                 return View(blogs);
             }
 
-            // Handle the case when the NewsController's Index action does not return a ViewResult
-            // Return an error view or handle it accordingly
+
             return View("Error");
         }
 
@@ -162,8 +157,6 @@ namespace Blog.Controllers
         }
 
         // POST: Blog/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Content,Created,ImagePath")] BlogModel blogModel, IFormFile file)
@@ -208,12 +201,101 @@ namespace Blog.Controllers
                     _context.Update(blogModel);
                     await _context.SaveChangesAsync();
                 }
-                else{
+                else
+                {
                     return RedirectToAction("Index", blogModel);
                 }
             }
             return RedirectToAction("Index", blogModel);
         }
+
+        // GET: Blog/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var blogModel = await _context.Blogs.FindAsync(id);
+            if (blogModel == null)
+            {
+                return NotFound();
+            }
+
+            return View(blogModel);
+        }
+
+        // POST: Blog/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,Created,ImagePath")] BlogModel blogModel, IFormFile file)
+        {
+            if (id != blogModel.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var existingBlog = await _context.Blogs.FindAsync(id);
+                    if (existingBlog == null)
+                    {
+                        return NotFound();
+                    }
+
+                    existingBlog.Title = blogModel.Title;
+                    existingBlog.Content = blogModel.Content;
+                    existingBlog.Created = blogModel.Created;
+
+                    if (file != null && file.Length != 0)
+                    {
+                        // Delete the existing image file, if any
+                        if (!string.IsNullOrEmpty(existingBlog.ImagePath))
+                        {
+                            var wePath = hostingEnvironment.WebRootPath;
+                            var imagePathToDelete = Path.Combine(wePath, existingBlog.ImagePath);
+                            if (System.IO.File.Exists(imagePathToDelete))
+                            {
+                                System.IO.File.Delete(imagePathToDelete);
+                            }
+                        }
+
+                        // Upload and save the new image file
+                        FileInfo fi = new FileInfo(file.FileName);
+                        var newFilename = blogModel.Id + "_" + String.Format("{0:d}", (DateTime.Now.Ticks / 10) % 1000000) + fi.Extension;
+                        var webPath = hostingEnvironment.WebRootPath;
+                        var path = Path.Combine("", webPath + @"\Images\" + newFilename);
+                        var pathToSave = @"\Images\" + newFilename;
+                        using (var stream = new FileStream(path, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
+
+                        existingBlog.ImagePath = pathToSave;
+                    }
+
+                    _context.Update(existingBlog);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BlogModelExists(blogModel.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(blogModel);
+        }
+
 
         // GET: Blog/Delete/5
         public async Task<IActionResult> Delete(int? id)

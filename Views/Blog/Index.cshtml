@@ -29,7 +29,7 @@
     <div class="avatar-container">
         <img src="/Images/avatar.jpg" alt="Avatar" class="avatar">
         <div class="message">
-            <p>I'm guessing you can't write your own blogs at the moment, what could be the problem?🤔<br />
+            <p style="color: #fff;">I'm guessing you can't write your own blogs at the moment, what could be the problem?🤔<br />
                Well it's because your haven't logged in, log in now🤣
             </p>
         </div>
@@ -47,11 +47,15 @@
                 style="height:50px ; width: 50px; border-radius: 50%;  ;">
             }
             <h2 style="display: inline-block; vertical-align: middle;">@item.AuthorName</h2>
-            <div class="authorimage">
-                <a href="@item.ImagePath" >
-                <img src="@item.ImagePath" alt="" class="blog-image"/>
+         <div class="authorimage @if (string.IsNullOrEmpty(item.ImagePath)) { <text>hidden</text> }">
+           @if (!string.IsNullOrEmpty(item.ImagePath))
+                  {
+           <a href="@item.ImagePath">
+            <img src="@item.ImagePath" alt="No image" class="blog-image" />
                 </a>
-            </div>
+                }
+         </div>
+
         </div>
         <div class="contents">
             <h2>@item.Title</h2>
@@ -71,7 +75,9 @@
                 }
              </ul>
              @if (SignInManager.IsSignedIn(User)){
-             <a asp-action="Details" asp-route-id="@item.Id">Comment</a>
+            <a asp-action="Details" asp-route-id="@item.Id">
+            <span style="outline: none; ">Comment</span>
+            </a>
              }else{
     <h4>Sign In to comment</h4>
 }

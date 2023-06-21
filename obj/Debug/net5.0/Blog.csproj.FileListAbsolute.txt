@@ -87,10 +87,6 @@ C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Views\Blog\Details.cshtml.g.cs
 C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Views\Blog\Edit.cshtml.g.cs
 C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Views\Blog\Index.cshtml.g.cs
 C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Views\Blog\Notification.cshtml.g.cs
-C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Views\Home\Index (2).cshtml.g.cs
-C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Views\Home\Index.cshtml.g.cs
-C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Views\Home\Privacy (2).cshtml.g.cs
-C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Views\Home\Privacy.cshtml.g.cs
 C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Views\Notification\Index.cshtml.g.cs
 C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Views\Shared\Error.cshtml.g.cs
 C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Views\Shared\_Layout.cshtml.g.cs
@@ -219,3 +215,4 @@ C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Areas\Identity\Pages\Account\Forg
 C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Areas\Identity\Pages\Account\ResetPassword.cshtml.g.cs
 C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Areas\Identity\Pages\Account\ForgotPasswordConfirmation.cshtml.g.cs
 C:\Users\Khothatso\Blog\bin\Debug\net5.0\blog.db
+C:\Users\Khothatso\Blog\obj\Debug\net5.0\Razor\Views\Home\About.cshtml.g.cs

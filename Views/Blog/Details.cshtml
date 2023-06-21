@@ -4,13 +4,11 @@
     ViewData["Title"] = "Details";
 }
 <div class="article">
-  <div class="article">
             <div class="authorname">
             <h2>@Model.AuthorName</h2>
             <div class="authorimage">
-                <img src="@Model.ImagePath" alt="" />
+                <img src="@Model.ImagePath" alt="" class="blog-image"/>
             </div>
-        </div>
         <div class="contents">
             <h2 >@Model.Title</h2>
             <p>@Html.Raw(@Model.Content)</p>
@@ -26,7 +24,6 @@
         }
         }
     </ul>
-    <h3>React</h3>
     <form method="post" action="/Blog/Reaction">
        <input type="hidden" name="blogId" value="@Model.Id" />
        <label for="value">Reaction:</label>
@@ -41,7 +38,7 @@
        <label for="comment">Comment:</label>
        <input type="text" name="comment" />
        <br />
-      <button type="submit">Comment</button>
+      <button type="submit">submit</button>
     </form>
 
      @if (User.Identity.Name == Model.AuthorName){

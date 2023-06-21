@@ -8,7 +8,7 @@ namespace Blog.Models
         public void Send(string emailTo, string subject, string body)
         {
             var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse("email"));
+            email.From.Add(MailboxAddress.Parse("khothatsojama@outlook.com"));
             email.To.Add(MailboxAddress.Parse(emailTo));
             email.Subject = subject;
             email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = body };
@@ -16,7 +16,7 @@ namespace Blog.Models
             using var smtp = new SmtpClient();
 
             smtp.Connect("smtp-mail.outlook.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-            smtp.Authenticate("email", "");
+            smtp.Authenticate("khothatsojama@outlook.com", "wkhnpuxgajtazwnq");
             smtp.Send(email);
             smtp.Disconnect(true);
         }

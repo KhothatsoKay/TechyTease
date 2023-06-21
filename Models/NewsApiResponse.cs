@@ -20,7 +20,7 @@ namespace Blog.Models
         public string Description { get; set; }
         public string Content { get; set; }
         public string Url { get; set; }
-        public string Image { get; set; } // Updated property name
+        public string Image { get; set; } 
         public DateTime PublishedAt { get; set; }
         public NewsSource Source { get; set; }
 

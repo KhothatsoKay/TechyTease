@@ -10,7 +10,7 @@ namespace Blog.Controllers
     public class NewsController : Controller
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiKey = "";
+        private readonly string _apiKey = "317c324993b59179ea11ef42dfd5dd0e";
 
         public NewsController(HttpClient httpClient)
         {
